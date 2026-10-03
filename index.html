@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>A little surprise 💗</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:
+        linear-gradient(135deg,#f8dce9,#eee3fa);
+    font-family:Arial, sans-serif;
+    overflow:hidden;
+}
+
+/* PHONE */
+.phone{
+    width:360px;
+    height:720px;
+    border:10px solid #181818;
+    border-radius:48px;
+    overflow:hidden;
+    position:relative;
+    box-shadow:0 25px 70px rgba(0,0,0,.25);
+    background:#d3b6c5;
+}
+
+.screen{
+    width:100%;
+    height:100%;
+    position:relative;
+}
+
+/* STATUS BAR */
+.status-bar{
+    position:absolute;
+    top:0;
+    width:100%;
+    padding:18px 22px;
+    display:flex;
+    justify-content:space-between;
+    color:white;
+    font-size:14px;
+    z-index:20;
+}
+
+/* LOCK SCREEN */
+#lockScreen{
+    height:100%;
+    padding-top:90px;
+    color:white;
+    background:
+        linear-gradient(
+            rgba(150,105,125,.25),
+            rgba(110,70,90,.3)
+        ),
+        linear-gradient(
+            160deg,
+            #cab0bc,
+            #a88698
+        );
+}
+
+.date{
+    text-align:center;
+    font-size:17px;
+}
+
+.time{
+    text-align:center;
+    font-size:76px;
+    font-weight:300;
+    margin-top:6px;
+}
+
+.notification{
+    width:88%;
+    margin:65px auto 0;
+    padding:16px;
+    background:rgba(255,255,255,.25);
+    backdrop-filter:blur(15px);
+    border-radius:22px;
+    display:flex;
+    gap:14px;
+    align-items:center;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.notification:hover{
+    transform:scale(1.02);
+    background:rgba(255,255,255,.32);
+}
+
+.notification-icon{
+    width:45px;
+    height:45px;
+    border-radius:12px;
+    background:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#ff5f98;
+    font-size:22px;
+}
+
+.notification strong{
+    display:block;
+    margin-bottom:5px;
+}
+
+.notification p{
+    font-size:14px;
+}
+
+/* HOME SCREEN */
+#homeScreen{
+    display:none;
+    height:100%;
+    padding:80px 25px 40px;
+    background:
+        radial-gradient(circle at top,#ead6e2,#ba91a7);
+    color:white;
+}
+
+.welcome{
+    text-align:center;
+    margin-bottom:50px;
+}
+
+.welcome h2{
+    font-size:25px;
+    margin-bottom:8px;
+}
+
+.welcome p{
+    opacity:.85;
+}
+
+.apps{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:30px 20px;
+}
+
+.app{
+    text-align:center;
+    cursor:pointer;
+}
+
+.app-icon{
+    width:68px;
+    height:68px;
+    margin:auto;
+    background:rgba(255,255,255,.9);
+    border-radius:18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    box-shadow:0 8px 20px rgba(0,0,0,.12);
+    transition:.25s;
+}
+
+.app:hover .app-icon{
+    transform:translateY(-5px);
+}
+
+.app p{
+    margin-top:8px;
+    font-size:13px;
+}
+
+/* APP WINDOW */
+.app-window{
+    display:none;
+    position:absolute;
+    inset:0;
+    padding:75px 25px 30px;
+    z-index:15;
+    background:linear-gradient(160deg,#f5e8ee,#d8b8c8);
+    color:#4c3440;
+    overflow-y:auto;
+}
+
+.top{
+    display:flex;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+.back{
+    background:none;
+    border:none;
+    font-size:28px;
+    cursor:pointer;
+    margin-right:15px;
+    color:#6a4358;
+}
+
+.top h2{
+    flex:1;
+}
+
+/* MESSAGE */
+.letter{
+    background:white;
+    border-radius:25px;
+    padding:25px;
+    line-height:1.7;
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+}
+
+/* PHOTOS */
+.photos{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.photo{
+    width: 155px;
+    height: 300px;
+    border-radius:20px;
+    background:
+        linear-gradient(135deg,#ffcfdf,#bfa3e0);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+}
+
+.photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+
+
+</div>
+/* PHOTO VIEWER */
+.photo{
+    cursor:pointer;
+}
+
+.photo-viewer{
+    display:none;
+    position:absolute;
+    inset:0;
+    z-index:50;
+    background:rgba(30,20,30,.92);
+    justify-content:center;
+    align-items:center;
+}
+
+.photo-viewer img{
+    max-width:85%;
+    max-height:75%;
+    object-fit:contain;
+    border-radius:20px;
+}
+
+.viewer-close,
+.viewer-prev,
+.viewer-next{
+    position:absolute;
+    border:none;
+    background:rgba(255,255,255,.2);
+    color:white;
+    cursor:pointer;
+    border-radius:50%;
+    width:42px;
+    height:42px;
+    font-size:25px;
+}
+
+.viewer-close{
+    top:25px;
+    right:20px;
+}
+
+.viewer-prev{
+    left:15px;
+    top:50%;
+}
+
+.viewer-next{
+    right:15px;
+    top:50%;
+}
+  .photo{
+    cursor:pointer;
+}
+
+.photo-viewer{
+    display:none;
+    position:absolute;
+    inset:0;
+    z-index:100;
+    background:rgba(20,10,20,.95);
+    align-items:center;
+    justify-content:center;
+}
+
+.photo-viewer img{
+    max-width:85%;
+    max-height:75%;
+    border-radius:20px;
+    object-fit:contain;
+}
+
+.viewer-close,
+.viewer-prev,
+.viewer-next{
+    position:absolute;
+    border:none;
+    background:rgba(255,255,255,.2);
+    color:white;
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    font-size:25px;
+    cursor:pointer;
+}
+
+.viewer-close{
+    top:25px;
+    right:20px;
+}
+
+.viewer-prev{
+    left:15px;
+    top:50%;
+}
+
+.viewer-next{
+    right:15px;
+    top:50%;
+}
+/* MUSIC */
+.music-card{
+    padding:30px;
+    background:white;
+    border-radius:28px;
+    text-align:center;
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+}
+
+.album{
+    width:180px;
+    height:180px;
+    margin:0 auto 20px;
+    border-radius:25px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:70px;
+    background:linear-gradient(135deg,#e5bed0,#c9b4e7);
+}
+
+audio{
+    width:100%;
+    margin-top:20px;
+}
+
+/* SECRET */
+.secret-card{
+    background:white;
+    padding:30px 22px;
+    border-radius:25px;
+    text-align:center;
+}
+
+.secret-card input{
+    width:100%;
+    padding:15px;
+    border-radius:14px;
+    border:1px solid #ddd;
+    text-align:center;
+    font-size:18px;
+    margin:20px 0 12px;
+}
+
+.secret-card button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:14px;
+    background:#b27a96;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+#secretResult{
+    margin-top:20px;
+    line-height:1.6;
+}
+
+.home-line{
+    position:absolute;
+    width:120px;
+    height:5px;
+    background:white;
+    border-radius:10px;
+    bottom:10px;
+    left:50%;
+    transform:translateX(-50%);
+    opacity:.8;
+}
+</style>
+</head>
+
+<body>
+
+<div class="phone">
+
+<div class="screen">
+
+<!-- STATUS BAR -->
+<div class="status-bar">
+    <span>9:41</span>
+    <span>● ● ▰</span>
+</div>
+
+
+<!-- LOCK SCREEN -->
+<div id="lockScreen">
+
+    <div class="date">
+        Sunday, August 30
+    </div>
+
+    <div class="time">
+        9:41
+    </div>
+
+    <div class="notification" onclick="unlockPhone()">
+
+        <div class="notification-icon">
+            💌
+        </div>
+
+        <div>
+            <strong>Someone left you a message</strong>
+            <p>Tap to open...</p>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- HOME SCREEN -->
+<div id="homeScreen">
+
+    <div class="welcome">
+
+        <h2>Hi, My Love 🫶🏻</h2>
+
+        <p>
+            I made something for you...
+        </p>
+
+    </div>
+
+
+    <div class="apps">
+
+        <div class="app" onclick="openApp('photosApp')">
+            <div class="app-icon">📸</div>
+            <p>Memories</p>
+        </div>
+
+        <div class="app" onclick="openApp('musicApp')">
+            <div class="app-icon">🎵</div>
+            <p>Our Song</p>
+        </div>
+
+        <div class="app" onclick="openApp('messageApp')">
+            <div class="app-icon">💌</div>
+            <p>Message</p>
+        </div>
+
+        <div class="app" onclick="openApp('secretApp')">
+            <div class="app-icon">🔐</div>
+            <p>Secret</p>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- PHOTOS APP -->
+<div class="app-window" id="photosApp">
+
+    <div class="top">
+        <button class="back" onclick="goHome()">‹</button>
+        <h2>Memories 📸</h2>
+    </div>
+
+    <div class="photos">
+
+        <div class="photo" onclick="openPhoto(0)">
+            <img src="https://res.cloudinary.com/baiozn4j/image/upload/v1788087653/10.jpg">
+        </div>
+
+        <div class="photo" onclick="openPhoto(1)">
+            <img src="https://res.cloudinary.com/baiozn4j/image/upload/v1788087689/20.jpg">
+        </div>
+
+        <div class="photo" onclick="openPhoto(2)">
+            <img src="https://res.cloudinary.com/baiozn4j/image/upload/v1788087719/30.jpg">
+        </div>
+
+        <div class="photo" onclick="openPhoto(3)">
+            <img src="https://res.cloudinary.com/baiozn4j/image/upload/v1788087743/40.jpg">
+        </div>
+
+    </div>
+
+</div>
+</div>
+<!-- PHOTO VIEWER -->
+<div class="photo-viewer" id="photoViewer">
+
+    <button class="viewer-close" onclick="closePhoto()">✕</button>
+
+    <button class="viewer-prev" onclick="previousPhoto()">‹</button>
+
+    <img id="viewerImage" src="" alt="Memory">
+
+    <button class="viewer-next" onclick="nextPhoto()">›</button>
+
+</div>
+</div>
+
+
+<!-- MUSIC APP -->
+<div class="app-window" id="musicApp">
+
+    <div class="top">
+        <button class="back" onclick="goHome()">‹</button>
+        <h2>Our Song 🎵</h2>
+    </div>
+
+    <div class="music-card">
+
+        <div class="album">
+            🎧
+        </div>
+
+        <h3>Maak Alby</h3>
+
+        <p style="margin-top:8px;">
+            A song that tells our love story 🎶❤️
+        </p>
+
+        <!--
+        بعدين ممكن تضيفي ملف الأغنية هنا
+        -->
+
+        <audio controls>
+    <source src="https://res.cloudinary.com/baiozn4j/video/upload/v1788084802/04_-_Maak_Alby.mp3" type="audio/mpeg">
+</audio>
+
+    </div>
+
+</div>
+
+
+<!-- MESSAGE APP -->
+<div class="app-window" id="messageApp">
+
+    <div class="top">
+        <button class="back" onclick="goHome()">‹</button>
+        <h2>For You 💌</h2>
+    </div>
+
+    <div class="letter">
+
+    <h3 style="margin-bottom:15px;">
+        Hey 🫶🏻
+    </h3>
+
+    <p>
+        عايزه اعترفلك تاني و تالت اني بحبك موووت و ببقي مبسوطه لما نكون سوا
+        و نتكلم واحكيلك يومي و كل حاجه عن حياتي و اشاركك كل حاجه.
+        <br><br>
+
+        احنا اه بعاد بس كل تفصيله في يومي بحب انك تشاركني فيها و نعيشها سوا.
+        بحب حبك ليا اوييي وانت افضل مستمع شوفته في حياتي.
+        <br><br>
+
+        حد بيحبني و بيحب يسمعني و يديني مساحه اتكلم منغير م افكر هقول ايه.
+        بتكلم براحتي و بحكيلك حاجات انكسف اقولها لاي حد عشان واثقه فيييك موووت.
+        <br><br>
+
+        و شايفاك زوجي المستقبلي و حاضري و كل حاجه.
+        انا بجد بحبك موووت، مش عارفه اوصف مدى حبي الشديد ليك و اهتمامي بيك.
+        <br><br>
+
+        و انا مبسوطه اوي اني بعمل حاجات تبسطك و فعلاً ده من احلي الحاجات
+        اللي اشتغلت عليها وانا مبسوطه موووت و محستش بزهق ولا تعب.
+        <br><br>
+
+        و ياارب الفكره تكون عجبتك.
+        و هقولها تالت: أنا بعشقك م بس بحبك.
+        <br><br>
+
+        ربنا يخليك ليا يا أحلى حاجه دخلت حياتي،
+        يا صاحبي، يا حبيبي، يا زوجي المستقبلي، و رفيق قلبي و كل حياتي ❤️
+    </p>
+
+</div>
+</div>
+
+
+<!-- SECRET APP -->
+<div class="app-window" id="secretApp">
+
+    <div class="top">
+        <button class="back" onclick="goHome()">‹</button>
+        <h2>Secret 🔐</h2>
+    </div>
+
+    <div class="secret-card">
+
+        <h3>One last thing...</h3>
+
+        <p style="margin-top:10px;">
+            Enter our secret code.
+        </p>
+
+        <input
+            id="password"
+            type="password"
+            placeholder="••••"
+        >
+
+        <button onclick="checkPassword()">
+            Unlock
+        </button>
+
+        <div id="secretResult"></div>
+
+    </div>
+
+</div>
+
+
+<div class="home-line"></div>
+
+</div>
+</div>
+
+
+<script>
+
+function unlockPhone(){
+
+    document.getElementById("lockScreen").style.display="none";
+
+    document.getElementById("homeScreen").style.display="block";
+
+}
+
+
+function openApp(appId){
+
+    document.getElementById("homeScreen").style.display="none";
+
+    document.querySelectorAll(".app-window").forEach(function(app){
+
+        app.style.display="none";
+
+    });
+
+    document.getElementById(appId).style.display="block";
+
+}
+
+
+function goHome(){
+
+    document.querySelectorAll(".app-window").forEach(function(app){
+
+        app.style.display="none";
+
+    });
+
+    document.getElementById("homeScreen").style.display="block";
+
+}
+
+const photoList = [
+    "https://res.cloudinary.com/baiozn4j/image/upload/v1788087653/10.jpg",
+    "https://res.cloudinary.com/baiozn4j/image/upload/v1788087689/20.jpg",
+    "https://res.cloudinary.com/baiozn4j/image/upload/v1788087719/30.jpg",
+    "https://res.cloudinary.com/baiozn4j/image/upload/v1788087743/40.jpg"
+];
+
+let currentPhoto = 0;
+
+function openPhoto(index){
+
+    currentPhoto = index;
+
+    document.getElementById("viewerImage").src =
+        photoList[currentPhoto];
+
+    document.getElementById("photoViewer").style.display = "flex";
+}
+
+function closePhoto(){
+
+    document.getElementById("photoViewer").style.display = "none";
+}
+
+function nextPhoto(){
+
+    currentPhoto++;
+
+    if(currentPhoto >= photoList.length){
+        currentPhoto = 0;
+    }
+
+    document.getElementById("viewerImage").src =
+        photoList[currentPhoto];
+}
+
+function previousPhoto(){
+
+    currentPhoto--;
+
+    if(currentPhoto < 0){
+        currentPhoto = photoList.length - 1;
+    }
+
+    document.getElementById("viewerImage").src =
+        photoList[currentPhoto];
+}
+function checkPassword(){
+
+    const entered =
+        document.getElementById("password").value;
+
+    /* غيري 1234 للكود الخاص بالمفاجأة */
+    const correctPassword="11.11";
+
+    const result=
+        document.getElementById("secretResult");
+
+    if(entered === correctPassword){
+
+        result.innerHTML =
+        "💗 Correct!<br><br>" +
+        "You found the final surprise ✨<br>" +
+        "بدمنك ي نور عيني";
+
+    }
+
+    else{
+
+        result.innerHTML =
+        "Not quite 👀<br>Try again.";
+
+    }
+
+}
+
+</script>
+<div id="photoViewer" class="photo-viewer">
+
+    <button onclick="closePhoto()" class="viewer-close">✕</button>
+
+    <button onclick="previousPhoto()" class="viewer-prev">‹</button>
+
+    <img id="viewerImage">
+
+    <button onclick="nextPhoto()" class="viewer-next">›</button>
+
+</div>
+</body>
+</html>
